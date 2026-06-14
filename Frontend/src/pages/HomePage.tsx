@@ -53,7 +53,7 @@ export const HomePage: React.FC = () => {
         <div className="relative z-10 max-w-3xl mx-auto space-y-6">
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-sm font-semibold tracking-wider uppercase border border-white/10">
             <Sparkles className="w-4 h-4 text-white animate-pulse" />
-            Powered by Gemini AI
+            Powered by GROQ AI
           </div>
           
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-none text-white drop-shadow-sm">
@@ -75,7 +75,7 @@ export const HomePage: React.FC = () => {
             <Button
               variant="secondary"
               onClick={() => navigate('/ai-recommend')}
-              className="py-4 px-8 text-md font-bold bg-white text-[#C9184A] hover:bg-[#be9caa] shadow-lg border border-transparent"
+              className="py-4 px-8 text-md font-bold bg-white/20 text-white backdrop-blur-md hover:bg-white/40 shadow-lg border border-white/30"
             >
               AI Recommend ✨
             </Button>

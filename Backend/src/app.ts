@@ -1,6 +1,7 @@
 import express, { type Request, type Response } from 'express';
 import cors from 'cors'
 
+import authRoutes from "./routes/auth.routes.ts";
 import catsRoute from './routes/cat.routes.ts';
 import aiRoutes from './routes/ai.routes.ts';
 import aiRecommendRoutes from './routes/aiRecommend.routes.ts';
@@ -22,7 +23,7 @@ app.get("/", (req: Request, res: Response) => {
     })
 })
 
-
+app.use("/api/auth", authRoutes);
 app.use("/api/cats", catsRoute);
 app.use("/api/ai", aiRoutes);
 app.use("/api/ai/aiRecommend", aiRecommendRoutes)
