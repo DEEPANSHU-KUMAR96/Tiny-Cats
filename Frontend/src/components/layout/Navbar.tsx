@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Cat, Sparkles, Menu, X } from 'lucide-react';
+import { Home, Cat, Sparkles, Menu, X, LogOut } from 'lucide-react';
+import { useAuth } from '../../auth';
+
 export const Navbar: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+
   const links = [
     { to: '/', label: 'Home', icon: Home },
     { to: '/cats', label: 'Cats', icon: Cat },
     { to: '/ai-recommend', label: 'AI Recommend', icon: Sparkles },
   ];
+
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
+
   return (
     <>
       {/* 1. Desktop Side Navbar (> 1024px) */}
@@ -42,6 +56,29 @@ export const Navbar: React.FC = () => {
             </NavLink>
           ))}
         </nav>
+
+        {/* User Profile & Logout section in desktop view */}
+        {isAuthenticated && user && (
+          <div className="mb-6 p-4 rounded-2xl bg-[#FFF0F6] border border-pink-100 flex flex-col gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-[#FF6B9D] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm">
+                {user.name.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-[#1A0A10] truncate">{user.name}</p>
+                <p className="text-[10px] text-[#1A0A10]/50 truncate">{user.email}</p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full py-2 px-3 rounded-xl bg-white hover:bg-pink-50 text-[#C9184A] hover:text-[#C9184A] border border-pink-100 hover:border-pink-200 transition-all font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Log Out</span>
+            </button>
+          </div>
+        )}
+
         {/* Version / Copyright Info */}
         <div className="text-xs text-[#1A0A10]/40 text-center border-t border-pink-50 pt-4">
           <p className="font-semibold">Tiny-Cats App v1.0</p>
@@ -76,6 +113,16 @@ export const Navbar: React.FC = () => {
               )}
             </NavLink>
           ))}
+          {/* Tablet Logout */}
+          {isAuthenticated && (
+            <button
+              onClick={handleLogout}
+              className="py-1.5 px-3 rounded-xl bg-[#FFF0F6] hover:bg-pink-100 text-[#C9184A] font-bold text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Log Out</span>
+            </button>
+          )}
         </nav>
       </header>
       {/* 3. Mobile Navigation Layout (< 640px) */}
@@ -111,24 +158,51 @@ export const Navbar: React.FC = () => {
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <nav className="flex-grow space-y-4">
-              {links.map(({ to, label, icon: Icon }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  onClick={toggleDrawer}
-                  className={({ isActive }) =>
-                    `flex items-center gap-4 py-3 px-4 rounded-2xl font-semibold transition-all duration-300 ${
-                      isActive
-                        ? 'bg-[#FF6B9D] text-white shadow-[0_8px_20px_rgba(255,107,157,0.25)]'
-                        : 'text-[#1A0A10]/70 hover:bg-[#FFF0F6] hover:text-[#FF6B9D]'
-                    }`
-                  }
-                >
-                  <Icon className="w-5 h-5 text-[#FF8FAB]" />
-                  <span>{label}</span>
-                </NavLink>
-              ))}
+            <nav className="flex-grow space-y-4 flex flex-col">
+              <div className="space-y-4 flex-grow animate-[slide-up_0.4s_ease-out_forwards]">
+                {links.map(({ to, label, icon: Icon }) => (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    onClick={toggleDrawer}
+                    className={({ isActive }) =>
+                      `flex items-center gap-4 py-3 px-4 rounded-2xl font-semibold transition-all duration-300 ${
+                        isActive
+                          ? 'bg-[#FF6B9D] text-white shadow-[0_8px_20px_rgba(255,107,157,0.25)]'
+                          : 'text-[#1A0A10]/70 hover:bg-[#FFF0F6] hover:text-[#FF6B9D]'
+                      }`
+                    }
+                  >
+                    <Icon className="w-5 h-5 text-[#FF8FAB]" />
+                    <span>{label}</span>
+                  </NavLink>
+                ))}
+              </div>
+
+              {/* Mobile Drawer Logout */}
+              {isAuthenticated && user && (
+                <div className="pt-4 border-t border-pink-50 flex flex-col gap-3 mt-auto">
+                  <div className="px-2 flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-[#FF6B9D] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-[#1A0A10] truncate">{user.name}</p>
+                      <p className="text-xs text-[#1A0A10]/50 truncate">{user.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      toggleDrawer();
+                      handleLogout();
+                    }}
+                    className="w-full flex items-center gap-4 py-3 px-4 rounded-2xl font-semibold text-[#C9184A] hover:bg-[#FFF0F6] transition-all cursor-pointer"
+                  >
+                    <LogOut className="w-5 h-5 text-[#C9184A]" />
+                    <span>Log Out</span>
+                  </button>
+                </div>
+              )}
             </nav>
           </div>
         </div>
