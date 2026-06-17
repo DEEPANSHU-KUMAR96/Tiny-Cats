@@ -21,18 +21,13 @@ import {
 import { Navigate, Link } from "react-router-dom";
 
 export const AdminDashboardPage: React.FC = () => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, isLoading: authLoading } = useAuth();
 
   const [requests, setRequests] = useState<IAdoptionRequestPopulated[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"all" | AdoptionStatus>("all");
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
-
-  // Security check: Redirect non-admins
-  if (!currentUser || currentUser.role !== "admin") {
-    return <Navigate to="/" replace />;
-  }
 
   const fetchRequests = async () => {
     setIsLoading(true);
@@ -48,10 +43,13 @@ export const AdminDashboardPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchRequests();
-  }, []);
+    if (!authLoading && currentUser?.role === "admin") {
+      fetchRequests();
+    }
+  }, [authLoading, currentUser]);
 
   const handleApprove = async (id: string) => {
+    console.log("[AdminDashboard] handleApprove clicked for request ID:", id);
     setActionLoadingId(id);
     try {
       await adoptionService.approveRequest(id);
@@ -66,6 +64,7 @@ export const AdminDashboardPage: React.FC = () => {
   };
 
   const handleReject = async (id: string) => {
+    console.log("[AdminDashboard] handleReject clicked for request ID:", id);
     setActionLoadingId(id);
     try {
       await adoptionService.rejectRequest(id);
@@ -95,6 +94,23 @@ export const AdminDashboardPage: React.FC = () => {
   );
 
   const pendingCount = requests.filter((r) => r.status === "pending").length;
+
+  // Render spinner while auth is restoring session
+  if (authLoading) {
+    return (
+      <div className="min-h-[50vh] flex flex-col items-center justify-center gap-4 animate-[fade-in_0.3s_ease-out_forwards]">
+        <div className="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center text-[#FF6B9D] border border-pink-100 shadow-sm">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </div>
+        <p className="text-sm font-semibold text-[#FF6B9D]">Checking credentials...</p>
+      </div>
+    );
+  }
+
+  // Security check: Redirect non-admins
+  if (!currentUser || currentUser.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
 
   if (isLoading) {
     return (
@@ -164,11 +180,10 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  isActive
+                className={`py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${isActive
                     ? "bg-[#FF6B9D] text-white shadow-sm"
                     : "text-[#1A0A10]/60 hover:bg-[#FFF0F6] hover:text-[#FF6B9D]"
-                }`}
+                  }`}
               >
                 {tabLabels[tab]} ({count})
               </button>

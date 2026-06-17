@@ -23,6 +23,7 @@ export const register = async (req: Request<{}, {}, RegisterBody>, res: Response
                     name: user.name,
                     email: user.email,
                     mobile: user.mobile,
+                    role: user.role,
                 },
             },
         });
@@ -49,6 +50,7 @@ export const login = async (req: Request<{}, {}, LoginBody>, res: Response): Pro
                     name: user.name,
                     email: user.email,
                     mobile: user.mobile,
+                    role: user.role,
                 },
             },
         });
