@@ -6,6 +6,7 @@ export interface IUserDocument {
     email: string;
     password: string;
     mobile: string;
+    role?: "user" | "admin";
     createdAt?: Date;
     updatedAt?: Date;
     comparePassword(candidatePassword: string): Promise<boolean>;

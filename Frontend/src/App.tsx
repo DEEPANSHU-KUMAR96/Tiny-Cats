@@ -10,6 +10,10 @@ import { CatsPage } from './pages/CatsPage';
 import { CatDetailPage } from './pages/CatDetailPage';
 import { AiRecommendPage } from './pages/AiRecommendPage';
 
+// Adoption Pages
+import { MyRequestsPage } from './adoption/pages/MyRequestsPage';
+import { AdminDashboardPage } from './adoption/pages/AdminDashboardPage';
+
 // Auth
 import { AuthProvider, LoginPage, RegisterPage, ProtectedRoute } from './auth';
 
@@ -39,6 +43,8 @@ const App: React.FC = () => {
                         <Route path="/cats" element={<CatsPage />} />
                         <Route path="/cats/:id" element={<CatDetailPage />} />
                         <Route path="/ai-recommend" element={<AiRecommendPage />} />
+                        <Route path="/my-requests" element={<MyRequestsPage />} />
+                        <Route path="/admin" element={<AdminDashboardPage />} />
                       </Routes>
                     </main>
                     

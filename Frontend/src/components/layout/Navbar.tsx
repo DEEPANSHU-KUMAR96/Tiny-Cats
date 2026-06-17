@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Cat, Sparkles, Menu, X, LogOut } from 'lucide-react';
+import { Home, Cat, Sparkles, Menu, X, LogOut, HeartHandshake, Shield } from 'lucide-react';
 import { useAuth } from '../../auth';
 
 export const Navbar: React.FC = () => {
@@ -11,6 +11,11 @@ export const Navbar: React.FC = () => {
     { to: '/', label: 'Home', icon: Home },
     { to: '/cats', label: 'Cats', icon: Cat },
     { to: '/ai-recommend', label: 'AI Recommend', icon: Sparkles },
+    ...(isAuthenticated && user
+      ? user.role === 'admin'
+        ? [{ to: '/admin', label: 'Admin Dashboard', icon: Shield }]
+        : [{ to: '/my-requests', label: 'My Requests', icon: HeartHandshake }]
+      : [])
   ];
 
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);

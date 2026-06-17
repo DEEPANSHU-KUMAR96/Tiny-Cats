@@ -4,6 +4,7 @@ import { Users, Building2, Heart } from 'lucide-react';
 import type { ICat } from '../../types/cats.types';
 import { Badge } from '../ui/Badge';
 import { CatImage } from '../ui/CatImage';
+import { AdoptButton } from '../../adoption/components/AdoptButton';
 interface CatCardProps {
   cat: ICat;
 }
@@ -49,6 +50,12 @@ export const CatCard: React.FC<CatCardProps> = ({ cat }) => {
       <p className="text-sm text-[#1A0A10]/60 line-clamp-2 mb-4 flex-grow">
         {cat.description}
       </p>
+      
+      {/* Adopt Button Section */}
+      <div className="mb-4">
+        <AdoptButton catId={cat._id} />
+      </div>
+
       {/* Attributes & Icons Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-pink-50/60 mt-auto">
         {/* Energy Level Badge */}

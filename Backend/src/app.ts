@@ -6,13 +6,14 @@ import catsRoute from './routes/cat.routes.ts';
 import aiRoutes from './routes/ai.routes.ts';
 import aiRecommendRoutes from './routes/aiRecommend.routes.ts';
 import mcpRoutes from './routes/test-mcp.routes.ts';
+import adoptionRoutes from "./routes/adoption.routes.ts";
 
 const app = express()
 
 app.use(express.json())
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true
 }))
 
@@ -28,6 +29,7 @@ app.use("/api/cats", catsRoute);
 app.use("/api/ai", aiRoutes);
 app.use("/api/ai/aiRecommend", aiRecommendRoutes)
 app.use("/api/mcp", mcpRoutes)
+app.use("/api/adoption", adoptionRoutes);
 
 
 

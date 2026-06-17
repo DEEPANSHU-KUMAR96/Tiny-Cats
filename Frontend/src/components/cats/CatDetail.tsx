@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Users, Building2, ShieldAlert, Sparkles } from 'lucide-react';
+import { ArrowLeft, Users, Building2, ShieldAlert } from 'lucide-react';
 import type { ICat } from '../../types/cats.types';
 import { Badge } from '../ui/Badge';
 import { CatImage } from '../ui/CatImage';
+import { AdoptButton } from '../../adoption/components/AdoptButton';
 interface CatDetailProps {
   cat: ICat;
 }
@@ -100,14 +101,8 @@ export const CatDetail: React.FC<CatDetailProps> = ({ cat }) => {
           {/* Action Footer */}
           <div className="border-t border-pink-50 pt-6 mt-4 flex items-center justify-between">
             <span className="text-xs text-gray-400">Added: {new Date(cat.createdAt).toLocaleDateString()}</span>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => alert('Adopt flow coming soon! 🐾')}
-                className="flex items-center gap-2 bg-gradient-to-r from-[#FF6B9D] to-[#C9184A] text-white font-semibold py-2.5 px-5 rounded-2xl hover:shadow-[0_8px_24px_rgba(255,107,157,0.35)] transition-all duration-300 transform active:scale-95 cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Adopt Me</span>
-              </button>
+            <div className="flex gap-2 min-w-[160px]">
+              <AdoptButton catId={cat._id} />
             </div>
           </div>
         </div>

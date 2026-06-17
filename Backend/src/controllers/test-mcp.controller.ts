@@ -16,7 +16,7 @@ export const testMcpController = async (req: Request, res: Response) => {
         },
      })
 
-     let catsData = result.content[0].text
+     let catsData = (result as any).content[0].text
 
      let prompt = `
      

@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema<IUserMongoose>(
             minlength: [10, "Min 10 characters required"],
             maxlength: [10, "Max 10 characters required"],
         },
+        role: {
+            type: String,
+            enum: ["user", "admin"],
+            default: "user",
+        },
     },
     { timestamps: true }
 );
