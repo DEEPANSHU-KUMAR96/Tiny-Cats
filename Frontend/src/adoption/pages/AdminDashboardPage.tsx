@@ -17,6 +17,7 @@ import {
   FileText,
   Clock,
   Heart,
+  Trash2,
 } from "lucide-react";
 import { Navigate, Link } from "react-router-dom";
 
@@ -73,6 +74,22 @@ export const AdminDashboardPage: React.FC = () => {
       );
     } catch (err: any) {
       alert(err.response?.data?.message || err.message || "Failed to reject request");
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    console.log("[AdminDashboard] handleDelete clicked for request ID:", id);
+    const confirmed = window.confirm("Are you sure you want to delete this request? This cannot be undone.");
+    if (!confirmed) return;
+
+    setActionLoadingId(id);
+    try {
+      await adoptionService.deleteRequest(id);
+      setRequests((prev) => prev.filter((r) => r._id !== id));
+    } catch (err: any) {
+      alert(err.response?.data?.message || err.message || "Failed to delete request");
     } finally {
       setActionLoadingId(null);
     }
@@ -181,8 +198,8 @@ export const AdminDashboardPage: React.FC = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`py-2 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${isActive
-                    ? "bg-[#FF6B9D] text-white shadow-sm"
-                    : "text-[#1A0A10]/60 hover:bg-[#FFF0F6] hover:text-[#FF6B9D]"
+                  ? "bg-[#FF6B9D] text-white shadow-sm"
+                  : "text-[#1A0A10]/60 hover:bg-[#FFF0F6] hover:text-[#FF6B9D]"
                   }`}
               >
                 {tabLabels[tab]} ({count})
@@ -297,8 +314,20 @@ export const AdminDashboardPage: React.FC = () => {
 
                   {/* Status & Action Buttons */}
                   <div className="flex items-center justify-between gap-4 pt-2">
-                    <div>
+                    <div className="flex items-center gap-2">
                       <AdoptionStatusBadge status={request.status} />
+                      <button
+                        onClick={() => handleDelete(request._id)}
+                        disabled={actionLoadingId === request._id}
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
+                        title="Delete Request"
+                      >
+                        {actionLoadingId === request._id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Trash2 className="w-3.5 h-3.5" />
+                        )}
+                      </button>
                     </div>
 
                     {request.status === "pending" && (

@@ -62,4 +62,14 @@ export const adoptionService = {
     );
     return response.data;
   },
+
+  /**
+   * Delete an adoption request (Admin only)
+   */
+  deleteRequest: async (id: string): Promise<IApiResponse<null>> => {
+    const response = await axiosInstance.delete<IApiResponse<null>>(
+      `${ADOPTION_BASE}/${id}`
+    );
+    return response.data;
+  },
 };

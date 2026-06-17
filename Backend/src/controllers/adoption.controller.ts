@@ -4,6 +4,7 @@ import {
     getMyAdoptionRequests,
     getAllAdoptionRequests,
     updateAdoptionRequestStatus,
+    deleteRequestService,
 } from "../services/adoption.service.ts";
 import type { CreateAdoptionBody } from "../types/adoption.types.ts";
 
@@ -138,6 +139,32 @@ export const rejectRequestController = async (req: Request<{ id: string }>, res:
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Failed to reject request";
         res.status(500).json({
+            success: false,
+            message,
+        });
+    }
+};
+
+/**
+ * Handle DELETE /api/adoption/:id (Admin route)
+ */
+export const deleteRequestController = async (
+    req: Request<{ id: string }>,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id } = req.params;
+        await deleteRequestService(id);
+
+        res.status(200).json({
+            success: true,
+            message: "Request deleted successfully",
+            data: null,
+        });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Failed to delete request";
+        const statusCode = message === "Request not found" ? 404 : 500;
+        res.status(statusCode).json({
             success: false,
             message,
         });

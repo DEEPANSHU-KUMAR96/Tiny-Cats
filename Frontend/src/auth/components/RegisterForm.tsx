@@ -122,7 +122,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               setName(e.target.value);
               clearFieldError('name');
             }}
-            placeholder="John Doe"
+            placeholder="userName"
             className={inputClass(!!formErrors.name)}
             autoComplete="name"
           />
@@ -152,7 +152,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               setEmail(e.target.value);
               clearFieldError('email');
             }}
-            placeholder="you@example.com"
+            placeholder="userEmail"
             className={inputClass(!!formErrors.email)}
             autoComplete="email"
           />

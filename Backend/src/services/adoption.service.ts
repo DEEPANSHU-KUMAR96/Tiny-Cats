@@ -74,3 +74,16 @@ export const updateAdoptionRequestStatus = async (
     request.status = status;
     return await request.save();
 };
+
+/**
+ * Permanently delete an adoption request
+ */
+export const deleteRequestService = async (
+    requestId: string
+): Promise<IAdoptionRequestDocument> => {
+    const request = await AdoptionRequestModel.findByIdAndDelete(requestId);
+    if (!request) {
+        throw new Error("Request not found");
+    }
+    return request;
+};

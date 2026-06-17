@@ -7,6 +7,7 @@ import {
     getAllRequestsController,
     approveRequestController,
     rejectRequestController,
+    deleteRequestController,
 } from "../controllers/adoption.controller.ts";
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.get("/my-requests", protect, getMyRequestsController);
 router.get("/all", protect, isAdmin, getAllRequestsController);
 router.patch("/:id/approve", protect, isAdmin, approveRequestController);
 router.patch("/:id/reject", protect, isAdmin, rejectRequestController);
+router.delete("/:id", protect, isAdmin, deleteRequestController);
 
 export default router;
