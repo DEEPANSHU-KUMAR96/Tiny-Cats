@@ -7,14 +7,14 @@ const groq = new Groq({
 
 export const generateAiResponse = async (prompt: string) => {
 
-    console.log("Prompt:", prompt); // ✅ check karo prompt aa raha hai ya nahi
+    console.log("Prompt:", prompt); 
 
     const completion = await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-120b",
         messages: [
             {
                 role: "user",
-                content: prompt, // ✅ prompt me already sab kuch hai
+                content: prompt, 
             },
         ],
     });
